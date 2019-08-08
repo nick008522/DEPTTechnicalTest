@@ -1,4 +1,4 @@
-﻿@model DEPTTechnicalTest.Models.Results
+﻿@model List<DEPTTechnicalTest.Models.Measurement>;
 
 @{
     ViewData["Title"] = "Home Page";
@@ -48,7 +48,7 @@
     <tbody>
         @if (Model != null)
         {
-            @foreach (var item in Model.results)
+            @foreach (var item in Model)
             {
                 <tr>
                     <td>

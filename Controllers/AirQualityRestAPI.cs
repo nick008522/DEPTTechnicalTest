@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using DEPTTechnicalTest.Services;
+using Newtonsoft.Json;
+using DEPTTechnicalTest.Models;
 
 namespace DEPTTechnicalTest.Controllers
 {
@@ -10,10 +13,14 @@ namespace DEPTTechnicalTest.Controllers
     [ApiController]
     public class AirQualityRestAPIController : ControllerBase
     {
+        private AirQualityRepository airQualityRepository = new AirQualityRepository();
+        [Route("city/{city}")]
         [HttpGet]
-        public ActionResult<IEnumerable<string>> GetString()
+        public async Task<ActionResult<IEnumerable<string>>> GetStringAsync(string city)
         {
-            return new string[] { "this", "is", "hard", "coded" };
+            var measurements = await airQualityRepository.GetMeasurementForACityAsync(city);
+            var json = JsonConvert.SerializeObject(measurements);
+            return Ok(json);
         }
     }
 }

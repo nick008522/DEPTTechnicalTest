@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using DEPTTechnicalTest.Models;
+using DEPTTechnicalTest.Services;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -14,34 +15,19 @@ namespace DEPTTechnicalTest.Controllers
 {
     public class AirQualityController : Controller
     {
+        private static AirQualityRepository airQualityRepository = new AirQualityRepository();
         // GET: /<controller>/
         public async Task<IActionResult> Index(string city)
         {
-            Results res = null;
-            if (!(city is null))
-             res = await GetAirQuality(String.IsNullOrEmpty(city) ? "" : city );
-
+            List<Measurement> res = await GetAirQuality(city);
             return View(res);
         }
 
 
-        public static async Task<Results> GetAirQuality(String city)
+        public static async Task<List<Measurement>> GetAirQuality(String city)
         {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Clear();
-
-            String strBuilder = "" ;
-            if (!String.IsNullOrEmpty(city)) strBuilder= "city=" + city;
-
-            //Add new things here --------------------------------------------------------------------------------------------
-
-            String questionmark = "";
-            if (strBuilder.Length > 0) questionmark = "?";
-
-                string jsonResult = await client.GetStringAsync("https://api.openaq.org/v1/measurements" + questionmark + strBuilder);
-
-            var res = JsonConvert.DeserializeObject<Results>(jsonResult);
-            return res;
+            var measurements = await airQualityRepository.GetMeasurementForACityAsync(city);
+            return measurements;
         }
     }
 }
