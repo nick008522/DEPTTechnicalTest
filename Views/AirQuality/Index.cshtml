@@ -1,0 +1,82 @@
+﻿@model DEPTTechnicalTest.Models.Results
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Air Quality</h1>
+</div>
+
+@using (Html.BeginForm("Index", "AirQuality", FormMethod.Post))
+{
+    <table cellpadding="0" cellspacing="0" class="form-group">
+
+        <tr>
+            <td>City: </td>
+            <td>
+                @Html.TextBox("city", null, new { @class = "form-control" })
+            </td>
+        </tr>
+        <tr>
+            @*<td>Sorting: </td>*@
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Submit" /></td>
+        </tr>
+    </table>
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Location</th>
+            <th>Parameter</th>
+            <th>Date UTC</th>
+            <th>Value</th>
+            <th>Unit</th>
+            <th>Coordinates</th>
+            <th>Country</th>
+            <th>City</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            @foreach (var item in Model.results)
+            {
+                <tr>
+                    <td>
+                        @item.location
+                    </td>
+                    <td>
+                        @item.parameter
+                    </td>
+                    <td>
+                        @item.date.utc
+                    </td>
+                    <td>
+                        @item.value
+                    </td>
+                    <td>
+                        @item.unit
+                    </td>
+                    <td>
+                        @item.coordinates.latitude  +  @item.coordinates.longitude
+                    </td>
+                    <td>
+                        @item.country
+                    </td>
+                    <td>
+                        @item.city
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
